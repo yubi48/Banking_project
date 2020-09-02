@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+
+ <script type="text/javascript">
+ 
+ 
+       function messageClear(){
+    	   $("#errorMessage").html("");
+       }
+ 
+        function authUser() {
+        	var  uname=$("#username").val();
+        	if(uname.length==0) {
+        		 $("#errorMessage").html("Hey!, username cannot be blank!");
+        		 $("#username").focus();
+        		 return;
+        	}
+        	
+        	var  upassword=$("#password").val();
+            if(upassword.length==0) {
+                 $("#errorMessage").html("Hey!, password cannot be blank!");
+                 $("#password").focus();
+                 return;
+            }
+            
+            var jsonObj={username:uname,password:upassword};
+            var jsonString= JSON.stringify(jsonObj);
+          
+            //AJAX - >>> Node.js
+            const options = {
+                    method: 'POST',
+                    body: jsonString,
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                    }
+                  };
+            
+            var promise=fetch('/v3/user/login', options);
+            promise.then(res => res.json()).then(function(data){
+            	 if(data.code==200) {
+            		    //submitting 
+            		    $("#loginForm").submit();
+            		    //document.loginForm.submit();
+            		    //document.getElementById("loginForm").submit();
+            	 }else {
+            		  $("#errorMessage").html(data.message);
+            	 }
+            });
+            
+        }
+ 
+ </script>
+
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;">
+</header>
+<div class="container">
+  <h2>Customer Login Page
+  </h2>
+  <img th:src="@{/images/login.png}" alt="Logo" style="height: 140px"/>
+   <br/>
+   <span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;"  id="errorMessage"></span>
+      <span th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
+  <div style="width: 70%">
+   <form th:action="@{/customer/login}" method="POST"   id="loginForm"  name="loginForm">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" style="width: 60%;" class="form-control"  name="username"  id="username"  placeholder="Enter username"  onkeyup="messageClear();">
+    </div>
+  
+    <div class="form-group">
+      <label for="password">Password:</label>
+       <input type="password" style="width: 60%;" class="form-control"  name="password"  id="password"  placeholder="Enter password" onkeyup="messageClear();">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    
+    <button type="reset" class="btn btn-danger">Reset</button>
+    
+    <a th:href="@{/customer/account/enquiry}"> 
+    <button type="button" class="btn btn-warning">Customer Enquiry</button>
+    </a>
+    
+    <a th:href="@{/customer/forget/password}">
+    <button type="button" class="btn btn-danger">Forget Password</button>
+    </a>
+    
+    <a th:href="@{/customer/app/status}">
+    <button type="button" class="btn btn-success">Enquiry Status</button>
+    </a>
+    
+     <a th:href="@{/customer/customerSearch}">
+    <button type="button" class="btn btn-success">Customer search</button>
+    </a>
+  </form>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

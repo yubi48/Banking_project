@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Customer Enquiry Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+
+</style>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;">
+</header>
+
+<div class="container">
+  <h2>Customer Enquiry Page
+  </h2>
+  <img th:src="@{/images/customer-en.png}" alt="Logo" style="height: 120px"/>
+  <div style="width: 70%">
+  
+   <form th:action="@{/customer/account/enquiry}" method="POST"  th:object="${customerSavingVO}" >
+  
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" style="width: 60%;" class="form-control" th:field="*{name}" placeholder="Enter name">
+    </div>
+  
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" th:field="*{email}" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+      <label for="mobile">Mobile:</label>
+      <input type="text" style="width: 60%;" th:field="*{mobile}"  class="form-control" placeholder="Enter mobile">
+    </div>
+    
+     <div class="form-group">
+      <label for="accType">A/C type:</label>
+      <select style="width: 60%;"  class="form-control" th:field="*{accType}">
+       <option value="">-----</option>
+         <option th:each="name:${accType}" th:value="${name}" th:text="${name}"></option>
+      </select>
+    </div>
+   
+   <div class="form-group">
+      <label for="location">Location:</label>
+      <select style="width: 80%;"  class="form-control" th:field="*{location}">
+      <option value="">-----</option>
+         <option th:each="name:${loc}" th:value="${name}" th:text="${name}"></option>
+      </select>
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+    <a th:href="@{/customer/login}"> 
+    <button type="button" class="btn btn-danger">Login</button>
+    </a>
+    
+  </form>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

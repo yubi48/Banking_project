@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Customer Dashboard Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;color:white;">
+
+    Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+    <span style="float: right;margin-right: 100px;font-weight: bold;" th:utext="${session.userSessionVO.roles}">
+    </span>
+   
+</header>
+<br/><br/>
+<div class="container">
+   <a th:href="@{/customer/addPayee}"> 
+  <button type="button" class="btn btn-primary">Add payee</button>
+  </a>
+
+<a th:href="@{/customer/payeeStatus}">
+<button type="button" class="btn btn-success">Pending payee</button>
+</a>
+
+<a th:href="@{/customer/registeredPayee}">
+<button type="button" class="btn btn-info">My registered payee</button>
+</a>
+<a th:href="@{/customer/deposit}"> 
+  <button type="button" class="btn btn-primary">Deposit</button>
+  </a>
+
+ <a th:href="@{/customer/logout}"><button type="button" class="btn btn-warning">Logout</button></a>
+ <br/>
+  <img th:src="@{/images/customer_dashboard.jpg}" alt="page"/>
+   <span th:utext="${error}" style="color: red;font-size: 18px;"></span>
+  <div style="width: 70%">
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

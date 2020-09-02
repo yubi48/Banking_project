@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add payee Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+
+<script  type="text/javascript">
+
+function validateForm(){
+	   var tpayeeAcc= $("#payeeAccountNo").val();
+	   var ttpayeeAcc =  $("#accNumberConfirm").val();
+	   var tpayeeName =  $("#payeeName").val();
+	   var tpayeeNick = $("#payeeNickName").val();
+	   var tremark =  $("#remarks").val();
+	   
+	   if(tpayeeAcc.length==0){
+	   	     $("#errorMessage").html("Please enter the payee account number");
+	   	     $("#payeeAcc").css("borderColor", "red");
+	   	     $("#payeeAcc").focus();
+	   	    return;
+	   	   }
+	   else {
+		   $("#errorMessage").html("");
+		   $("#payeeAcc").css("borderColor", "inherit");
+	   }
+	   
+	   if(tpayeeAcc.length==0){
+  	     $("#errorMessage").html("Please confirm the payee account number");
+  	     $("#tpayeeAcc").css("borderColor", "red");
+  	     $("#tpayeeAcc").focus();
+  	    return;
+  	   }
+	   else {
+		   $("#errorMessage").html("");
+		   $("#tpayeeAcc").css("borderColor", "inherit");
+	   }
+	   
+	    if(tpayeeName.length==0){
+  	     $("#errorMessage").html("Please enter the payee name");
+  	     $("#payeeName").css("borderColor", "red");
+  	     $("#payeeName").focus();
+  	    return;
+  	   }
+	   
+	   else {
+		   $("#errorMessage").html("");
+		   $("#payeeName").css("borderColor", "inherit");
+	   }
+	    
+	   document.addPayeeForm.submit();
+}
+
+</script>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;color:white;">
+ 
+</header>
+<!--  Hello Mr. --> <!-- <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span> -->
+<div class="container">
+ <br/>
+ <br/>
+<a th:href="@{/customer/pendingPayee}">
+<button type="button" class="btn btn-success">Pending payee</button>
+</a>
+
+<a th:href="@{/customer/payeeStatus}">
+<button type="button" class="btn btn-success">Payee Status</button>
+</a>
+
+<a th:href="@{/customer/registeredPayee}">
+<button type="button" class="btn btn-info">My registered payees</button>
+</a>
+ <a th:href="@{/customer/logout}"><button type="button" class="btn btn-warning">Logout</button></a>
+ <br/>
+ <br/>
+  
+ <div style="width: 100%">
+  
+   <form th:action="@{/customer/account/addPayee}" method="POST"  th:object="${payeeInfoVO}" name="addPayeeForm">
+    <div >
+     <span id="errorMessage" th:utext="${error}" style="color: red;font-size: 14px;"></span>
+    <span id="errorMessage" th:utext="${successMessage}" style="color: blue;font-size: 14px;"></span>
+  </div>
+    <br/>
+    <table class="table table-bordered" style="width: 100%;">
+						<tr>
+							<td>
+								<div>
+									<label for="payeeName">Payee Account name:</label> <br />
+									 <input type="text"  class="form-control"
+									 placeholder="Enter the payee account name" id="payeeName" name="payeeName" th:field="*{payeeName}"/> 
+                           <span th:if="${#fields.hasErrors('payeeName')}" th:errors="*{payeeName}">Name Error</span>	
+								</div>
+							</td>
+							<td>
+								<div>
+									<label for="tpayeeAcc">Nickname:</label> <br /> <input
+										type="text" class="form-control"
+										placeholder="Enter the payee NIck name"
+										id="payeeNickName" name="payeeNickName" th:field="*{payeeNickName}">
+										<span th:if="${#fields.hasErrors('payeeNickName')}" th:errors="*{payeeNickName}">Name Error</span>
+								</div>
+
+							</td>
+						</tr>
+
+
+						<tr>
+							<td>
+
+								<div>
+									<label for="payeeName">Account Number:</label> <br /> <input
+										type="password"  class="form-control"
+										id="payeeAccountNo" name="payeeAccountNo"
+										placeholder="Enter the payee account number" th:field="*{payeeAccountNo}">
+										<span th:if="${#fields.hasErrors('payeeAccountNo')}" th:errors="*{payeeAccountNo}">Name Error</span>
+								</div>
+							</td>
+							<td>
+
+								<div>
+									<label for="payeeNickName">Confirm Account number:</label> <br />
+									<input type="text" class="form-control"
+										id="accNumberConfirm" name="accNumberConfirm"
+										placeholder="Confirm the payee account number" th:field="*{payeeAccConfirmNO}">
+										<span th:if="${#fields.hasErrors('payeeAccConfirmNO')}" th:errors="*{payeeAccConfirmNO}">Name Error</span>
+								</div>
+
+							</td>
+						</tr>
+
+
+						<tr>
+							<td>
+
+								<div>
+									<label for="remarks">Remarks:</label> <br /> <input type="text"
+										 class="form-control" id="remark" placeholder="Remarks" th:field="*{remarks}"
+										name="remarks" >
+										<span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}">Name Error</span>
+								</div>
+							</td>
+							<td>
+							 &nbsp;
+							</td>
+						</tr>
+
+					</table>
+					<hr/>
+
+   <br/>
+ 
+    <button type="button" id="submitButton" onclick="validateForm();" class="btn btn-primary">Add payee</button>
+   
+  </form>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

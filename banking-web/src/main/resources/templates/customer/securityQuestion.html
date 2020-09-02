@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;">
+</header>
+<div class="container">
+  <h2>Customer Security Page
+  </h2>
+  <img th:src="@{/images/security_questions.png}" alt="Logo" style="height: 140px"/>
+   <br/>
+   <span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;"></span>
+      <span th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
+  <div style="width: 70%">
+   <form th:action="@{/customer/securityQuestion}" method="POST"  th:object="${customerSecurityQueAnsVO}" >
+    <div class="form-group">
+      <label for="question1"><b>Security Question1:</b></label>
+      <select   class="form-control"  th:field="*{securityQuestion1}" id="securityQuestion1">
+         <option th:each="questionsVO : ${questionsVOs1}" th:value="${questionsVO.qid}" th:text="${questionsVO.questions}"></option>
+      </select>
+      <label for="answer1"><b>Answer:</b></label>
+        <input type="text"  class="form-control"   th:field="*{securityQuestionAnswer1}" id="securityQuestionAnswer1">
+    </div>
+        <div class="form-group">
+      <label for="question2"><b>Security Question2:</b></label>
+        <select   class="form-control"  th:field="*{securityQuestion2}" id="securityQuestion2">
+          <option th:each="questionsVO : ${questionsVOs2}" th:value="${questionsVO.qid}" th:text="${questionsVO.questions}"></option>
+      </select>
+       <label for="answer2"><b>Answer:</b></label>
+           <input type="text"  class="form-control"   th:field="*{securityQuestionAnswer2}" id="securityQuestionAnswer2">
+    </div>
+    <button type="submit" class="btn btn-primary">Save Answers</button>
+    <a th:href="@{/customer/account/enquiry}"> 
+    <button type="button" class="btn btn-warning">Logout</button>
+    </a>
+  </form>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

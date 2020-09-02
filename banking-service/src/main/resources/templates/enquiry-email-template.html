@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring boot eamil teplate with Thymeleaf</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+
+    <!-- use the font -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 48px;
+        }
+    </style>
+</head>
+ <body>
+    <p th:text="${'Hello Dear ' + name}"></p>
+
+    <p th:if="${name.length() > 5}">
+      You are most welcome with our bank!!!
+    </p>
+    <p>
+      You have been successfully submitted <b>your enquiry</b> on
+      <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+    </p>
+    
+    <p>
+        <img th:src="|cid:cb|" />
+    </p>
+      Regards, <br />
+      <em th:text="${sign}"></em>
+      <p th:text="${location}"></p>
+      <p th:text="${email}"></p>
+      <img th:src="|cid:bankIcon|" />
+  </body>
+</html>

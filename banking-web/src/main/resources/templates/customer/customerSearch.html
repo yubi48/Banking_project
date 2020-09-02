@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Customer Search!!!</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+.ffooter {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
+}
+</style>
+
+<script type="text/javascript">
+ 
+ function searchCust(){
+	 $("#body").empty();
+	 
+	 var searchText = $("#cusSearch").val();
+	 if(searchText.length!=0){
+		 $("#errorMsg").hide();
+	 /* console.log("SearchText= "+searchText); */
+	 
+	 var customer = fetch("/v3/customer/customerSearch?searchText="+searchText);
+	 
+	 customer.then(response=>response.json()).then(function(data){
+	 
+	
+	/*  console.log(data.length) */
+	 
+	/*  var line=data.length; */
+	
+	 $.each(data,function(key,value){
+		 var row=$("#sample").clone();
+		 var tablebody=$("#body");
+		 tablebody.append(row);
+		 
+		/*  console.log(value.name) */
+		 $("#psno").html(2-key);
+		 $("#pname").html(value.name);
+		 $("#pemail").html(value.email);
+		 $("#pgender").html(value.gender);
+		 $("#pphoto").html("<img src=/v3/load/image?email="+value.email+" style=height:150px;>");
+		 $("#pdoe").html(value.doe);
+		 $("#pcard").html("<a href=javascript:openModal(\""+value.email+"\")><img src=/v3/load/image?email="+value.email+" style=height:30px; ></a>");
+	 })
+	 
+	 $("#ptable").show();
+	 })
+	 .catch(error=>{console.log("data not found");
+			$("#errorMsg").html("Invalid Customer Name or Email");
+	 		$("#ptable").hide();}
+ 			);
+	 }else{
+		 $("#ptable").hide();
+	 $("#errorMsg").html("Please Enter username or Email");
+	 }
+ }
+       function messageClear(){
+    	   var searchText=$("#cusSearch").val();
+    	   if(searchText.length==0){
+    		   $("#ptable").hide();
+    	   }
+	
+    	   $("#errorMessage").html("");
+       }
+       
+       
+       function openModal(email){
+    	   $("#ccFront").attr("src","/images/cc_front.jpg");
+    	   
+    	   $("#ccBack").attr("src","/images/cc_back.jpg");
+    	   
+    	   $("#openModal").modal("show");
+    	   
+    	   var customer = fetch("/v3/customer/customerSearch?searchText="+email); 
+    	   
+    	   customer.then(response=>response.json()).then(function(data){
+    		  
+    	 			//console.log(email);
+    	 			//console.log(data[0].name);
+    	 			$("#cname").html(data[0].name);
+    	 			$("#cemail").html(email);
+    	 			$("#photo").attr("src","/v3/load/image?email="+email);
+    	 			
+    	
+    	   })
+       }
+    	   
+    	   function generateCard(){
+    		   
+    		   var name = $("#cname").html();
+    			   $("#ccFront").attr("src","/v4/card/floadCard?name="+name);
+    			   $("#ccBack").attr("src","/v4/card/bloadCard");
+    			  /*  var customerCard = fetch("/v4/customer/cardSave?name="+name);
+    			   customerCard.then(response=>response.json()).then(function(data){
+    				   console.log(data.name);
+    			   }) */
+    			   
+    			     
+    	   }
+    	   
+    	   function clearCard(){
+    		   $("#cbody").empty();
+    	   }
+    	   
+    	   function saveCard(){
+    		   var name = $("#cname").html();
+    		   $.get("/v4/customer/cardSave", {name:name}, function (data) {  
+	                $("#msg").html("Your card info has been saved!!");  
+	            });
+    	   }
+    	   
+       
+    	  
+</script>
+</head>
+<body>
+	<header style="height: 30px; background-color: maroon;"> </header>
+	<div class="container">
+		<h2>Search for Customer:</h2>
+		<img th:src="@{/images/search.png}" alt="Logo" style="height: 140px" />
+		<br /> <span id="errorMsg" style="color: red;"></span>
+
+		<div style="width: 70%">
+
+			<div class="form-group">
+				<label for="username">Enter App Ref or Email:</label> <input
+					type="text" style="width: 60%;" class="form-control"
+					name="cusSearch" id="cusSearch" placeholder="Enter username"
+					onkeyup="messageClear();">
+			</div>
+
+			<button type="button" class="btn btn-primary" onclick="searchCust();">Search</button>
+
+			<button type="reset" class="btn btn-danger">Reset</button>
+
+			<a th:href="@{/customer/login}">
+				<button type="button" class="btn btn-warning">Login</button>
+			</a>
+
+		</div>
+		<hr />
+
+		<div id="ptable" style="display: none;">
+
+			<p>
+				<img th:src="@{/images/result.png}" style="height: 65px;"
+					id="ptable"> Customer's Info:
+			</p>
+			<table class="table table-striped" style="width: 60%;" id="table">
+				<thead>
+					<tr>
+						<th>S.NO</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Gender</th>
+						<th>Photo</th>
+						<th>DOE</th>
+						<th>Credit Card</th>
+					</tr>
+				</thead>
+				<tbody id="body">
+
+				</tbody>
+				<tfoot style="display: none;">
+					<tr id="sample">
+						<td id="psno">1</td>
+						<td id="pname">Doe</td>
+						<td id="pemail">mary@example.com</td>
+						<td id="pgender">546547567</td>
+						<td id="pphoto">Savings</td>
+						<td id="pdoe">Pending...</td>
+						<td id="pcard">gg</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+
+	</div>
+	<footer class="ffooter"> </footer>
+
+
+	<div id="openModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Credit Card Generator</h5>
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<img id="photo" src="" style="float: right" width="75" height="75"><br />
+					<b>Name:</b> <span id="cname"></span><br /> <b>Email:</b> <span
+						id="cemail"></span>
+					<hr />
+
+					<button type="button" id="generate"
+						onclick="javaScript:generateCard();" class="btn btn-primary"
+						style="float: right">Generate</button>
+					<br />
+					<hr />
+					<span id="msg"></span><br/>
+
+					<img src="" id="ccFront" style="width:460px; height:300;">
+					<hr />
+					<img src="" id="ccBack" style="width:460px; height:300;">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" onClick="javaScript:saveCard();">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

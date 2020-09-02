@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Customer List Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  
+  
+   
+  <script type="text/javascript">
+  $(document).ready(function() {
+        $('#enquiryList').DataTable();
+    } );
+  </script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+
+<script type="text/javascript">
+
+
+   function updateRole() {
+	   var tcid=$("#ceid").val();
+	   var trolesid = []; // JavaScript style to declare the Array
+       $("input[type='checkbox'][id='rolecheckbox']:checked").each(function(i) {
+    	   trolesid.push($(this).val());
+       });
+	   console.log(trolesid);  
+   	   //Create JavaScript object 
+   	   var obj={cid:tcid,rolesid:trolesid}; //List<Integer> rolesid
+   	   
+    	   //convert above object into JSON
+   	   var jsonData=JSON.stringify(obj);
+    	  
+    	   //Creating 
+    	   const options = {
+                   method: 'PUT',
+                   body: jsonData,
+                   headers: {
+                     'Content-Type': 'application/json',
+                     'Accept': 'application/json'
+                   }
+                 };
+    	   
+    	   var promise=fetch("/v3/customer/roles",options);
+    	   promise.then(response=>response.json())
+    	   .then(function(data){
+				 if(data.status=='success'){
+					 $("#rolesModal").modal('hide');
+					 $("#mmessage").html(data.message);
+					
+				 }
+    	   });
+   }
+   
+ 
+    //currentRoles=[1,2]
+   function isRoleMatch(currentRoles,roleid){ //2
+	   for(var t=0;t<currentRoles.length;t++) {
+		    if(currentRoles[t]==roleid){
+		    	return true;
+		    }
+	   }
+	   return false;
+   }
+
+   function openRolesPopup(cid,name,userid){
+	   //fetch all the roles from database
+	    //make ajax call
+    	   //usernameOrEmail="+usernameEmail sending data as query string
+	        var promise= fetch("/v3/customer/roles?userid="+userid); 	
+	        promise.then(response=>response.json()).then(function(data){
+	        	console.log(data);
+	        	var contents="";
+	        	//roleVOs
+	        	var currentRoles=data.currentRoles;
+	        	for(var i =0; i<data.roleVOs.length;i++) {
+                    var rowdata=data.roleVOs[i];
+                    console.log(rowdata);
+                    contents=contents+'<tr>';
+                    contents=contents+'<td>'+rowdata.id+'</td>';
+                    contents=contents+'<td>'+rowdata.name+'</td>';
+                    contents=contents+'<td>'+rowdata.description+'</td>';
+                    if(isRoleMatch(currentRoles,rowdata.id)) {
+                    	contents=contents+'<td><input checked type="checkbox" id="rolecheckbox" name="checkbox" value="'+rowdata.id+'"></td>';	
+                    }else{
+                    	contents=contents+'<td><input  type="checkbox" id="rolecheckbox" name="checkbox" value="'+rowdata.id+'"></td>';	
+                    }
+                    contents=contents+'</tr>';
+	        	}
+	        	$("#ceid").val(cid);
+	        	$("#roleContents").html(contents);
+	        });
+	 	   
+		   $("#photoIdWithRoleModal").attr("src","/admin/customers/photo?cid="+cid);
+	      $("#rolesModal").modal('show');
+   }
+  
+   function openModal(cid,name,mobile){
+	   console.log("cid = "+cid);
+	   console.log("name = "+name);
+	   console.log("mobile = "+mobile);
+	   //<img  src=""
+	   //JavaScript code to render the image
+	   
+	   $("#photophoto").attr("src","/admin/customers/photo?cid="+cid);
+	   $("#cid").val(cid);
+	   $("#pname").val(name);
+	   $("#pmobile").val(mobile);
+	   
+	   $("#editProfilePopup").modal('show');
+	   
+   }
+
+
+</script>
+
+</head>
+<body>
+
+
+<header style="height: 30px;background-color: maroon;color:white;">
+  Hello Mr. </span>
+   
+</header>
+<div class="container">
+  <h2>Admin Dashboard Page
+  </h2>
+  <button type="button" class="btn btn-primary">Customer Enquiry</button>
+<button type="button" class="btn btn-secondary">Lock/Unlock</button>
+<button type="button" class="btn btn-success">Customer Transaction</button>
+
+<button type="button" class="btn btn-danger">Check Book Request(s)</button>
+
+
+<a th:href="@{/customer/logout}"> 
+<button type="button" class="btn btn-warning">Logout</button>
+</a>
+   <hr/>
+   <span th:utext="${error}" style="color: red;font-size: 18px;" id="mmessage"></span>
+   <hr/>
+  <div style="width: 100%">
+ <hr/>
+    <table id="enquiryList" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+  <tr>
+  <td> SNO </td>
+  <td> Name </td>
+  <td> Email </td>
+   <td> Gender </td>
+   <td> Mobile </td>
+   <td> Userid </td>
+   <td> Photo </td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="customerVO,iter: ${customerVOs}">
+  
+    <td>
+      <span th:utext="${iter.index+1}"></span>
+      
+      <a th:onclick="|openModal(${customerVO.id},'${customerVO.name}','${customerVO.mobile}')|"  href="#"> 
+      <img th:src="@{/images/icon.png}"/>
+      </a>
+       <a th:onclick="|openRolesPopup(${customerVO.id},'${customerVO.name}','${customerVO.userid}')|"  href="#"> 
+      
+      <img th:src="@{/images/email.png}"/>
+      
+      
+      </a>
+      
+      
+    </td>
+    <td th:text="${customerVO.name}">
+    <td th:text="${customerVO.email}"/>
+    <td th:text="${customerVO.gender}"/>
+    <td th:text="${customerVO.mobile}"/>
+    <td th:text="${customerVO.userid}"/>
+    <td><img th:src="@{'/admin/customers/photo?cid=' + ${customerVO.id}}" style="height: 100px;"/>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br/>
+  <hr/>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+
+<!-- Roles Modal -->
+  <div class="modal" id="rolesModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+       
+      <form  method="post">
+     
+        <input type="hidden" name="cid" id="ceid"/>
+     
+        <div class="modal-header">
+          <div class="modal-title">
+          <h4>
+          <img src="" id="photoIdWithRoleModal" style="height: 60px;"/>
+          Current Roles </h4>
+<input type="hidden" id="roleModalEmailId" class="form-control" readonly>
+          <span id="showRoleUpdateMessage" th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
+          </div>
+          <button type="button" class="close" data-dismiss="modal" onclick="clearRoleMsg();">
+          &times;</button>
+        </div>
+ 
+        <!-- Modal body -->
+        <div class="modal-body">
+
+<table class="table table-striped table-bordered" style="width:100%">
+ <tbody>
+ <tr>
+     <td> ID </td>
+ <td> Role Name </td>
+ <td> Description </td>
+ <td> Action </td>
+ </tr>
+ 
+ <tbody id="roleContents">
+ <tr>
+   <td>
+     1      
+   </td>
+   <td></td>
+   <td></td>
+  <td><input type="checkbox" id="checkbox" name="checkbox"></td>
+ </tr>
+ </tbody>
+</table>
+
+        </div>
+       
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <!-- <button type="submit" class="btn btn-primary">Send Email</button> -->
+          <button type="button" onclick="updateRole();" class="btn btn-primary">Update Role(s)</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- The Modal -->
+  <div class="modal" id="editProfilePopup">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        
+      <form  method="post"  th:action="@{/admin/updateCustomer}" enctype= "multipart/form-data">
+      
+        <input type="hidden" name="cid" id="cid"/>
+      
+        <div class="modal-header">
+          <h4 class="modal-title">
+          <img src="" id="photophoto" style="height: 60px;"/>
+          Edit Profile</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+           
+            Name
+            <input type="text" name="name" id="pname" class="form-control">
+            
+            Mobile
+            <input type="text" name="mobile" id="pmobile" class="form-control">
+            Photo
+            <input type="file" name="photo" id="pphoto" class="form-control">
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Update Profile</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>

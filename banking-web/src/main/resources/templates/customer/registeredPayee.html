@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Registered payees page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  
+  
+   
+  <script type="text/javascript">
+  $(document).ready(function() {
+       // $('#enquiryList').DataTable();
+    } );
+  </script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+
+<script type="text/javascript">
+  
+function clearMsg(){
+	   $("#errorMessage").html("");
+}  
+
+  
+</script>
+
+</head>
+<body>
+
+
+<header style="height: 30px;background-color: maroon;color:white;">
+ 
+</header>
+<div class="container">
+  <br/><br/>
+  <a th:href="@{/customer/addPayee}"> 
+  <button type="button" class="btn btn-primary">Add payee</button>
+  </a>
+
+<a th:href="@{/customer/pendingPayee}">
+<button type="button" class="btn btn-success">Pending payee</button>
+</a>
+ <a th:href="@{/customer/logout}"><button type="button" class="btn btn-warning">Logout</button></a>
+ <br/>
+  <div style="width: 100%">
+ <hr/>
+    <table id="enquiryList" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+  <tr>
+  <td></td>
+  <td> Payee name </td>
+  <td> Nickname </td>
+  <td> Payee account number </td>
+   <td>Confirmation date</td>
+   <td> Remark</td>
+   <td> Status </td>
+
+  </tr>
+  </thead>
+ 
+  <tbody>
+  <tr th:each="payeeVO,iter: ${payeeInfoList}">
+    <td><input type="checkbox" id="payeeSelected" name="payeeSelected"></td>
+    <td th:text="${payeeVO.payeeName}"/>
+    <td th:text="${payeeVO.payeeNickName}"/>
+    <td th:text="${payeeVO.payeeAccountNo}"/>
+    <td th:text="${#dates.format(payeeVO.dom, 'dd-MMM-yyyy HH:mm')}"></td>
+    <td th:text="${payeeVO.remarks}"/>
+    <td th:text="${payeeVO.payeeStatus}"/>
+
+     
+    
+  </tr>
+  </tbody>
+  </table>
+ 
+   <br/>
+ <a th:href="@{/customer/fundTransfer}">
+    <button type="button" id="submitButton"  class="btn btn-primary">Make a transfer</button>
+    </a>
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+
+ 
+
+</body>
+</html>

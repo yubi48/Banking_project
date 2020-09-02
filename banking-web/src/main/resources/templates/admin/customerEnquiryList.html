@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  
+   
+  <script type="text/javascript">
+  $(document).ready(function() {
+	    $('#enquiryList').DataTable();
+	} );
+  </script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;color:white;">
+  Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+   
+</header>
+<div class="container">
+  <h2>Employee Dashboard Page
+  </h2>
+  <button type="button" class="btn btn-primary">Customer Enquiry</button>
+<button type="button" class="btn btn-secondary">Lock/Unlock</button>
+<button type="button" class="btn btn-success">Customer Transaction</button>
+
+<button type="button" class="btn btn-danger">Check Book Request(s)</button>
+
+<a th:href="@{/customer/logout}"> 
+<button type="button" class="btn btn-warning">Logout</button>
+</a>
+   <span th:utext="${error}" style="color: red;font-size: 18px;"></span>
+   <hr/>
+  <div style="width: 100%">
+  
+    <table id="enquiryList" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+  <tr>
+  <td> Reference ID </td>
+  <td> Name </td>
+  <td> Email </td>
+  <td> Account Type </td>
+  <td> Application Date </td>
+  <td>  </td>
+  <td>  </td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="applicant: ${applicants}">
+  	<td th:text="${applicant.appref}"/>
+  	<td th:text="${applicant.name}"/>
+  	<td th:text="${applicant.email}"/>
+  	<td th:text="${applicant.accType}"/>
+  	<td th:text="${applicant.doa}"/>
+  	<td>
+  	<form th:action="@{/customers/enquiry/approve}" th:method="post">
+  	<button type="submit" th:name="csaid" th:value="${applicant.csaid}" class="btn btn-success">Approve</button>
+  	</form> 
+  	</td>
+  	<td>
+  	<form th:action="@{/v3/customers/enquiry/deny}" th:method="post">
+  	<button type="submit" th:name="csaid" th:value="${applicant.csaid}" class="btn btn-danger">Deny</button>
+  	</form>
+  	</td>
+  	
+  </tr>
+  </tbody>
+  </table>
+  
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>

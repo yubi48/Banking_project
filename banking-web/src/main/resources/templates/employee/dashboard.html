@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+.ffooter {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  height: 30px;
+  background-color:#e9ffe7;
+}
+</style>
+</head>
+<body>
+<header style="height: 30px;background-color: maroon;color:white;">
+  Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+   
+</header>
+<div class="container">
+  <h2>Employee Dashboard Page
+  </h2>
+   <a th:href="@{/customer/enquiries}"> 
+  <button type="button" class="btn btn-primary">Customer Enquiry</button>
+  </a>
+<button type="button" class="btn btn-secondary">Lock/Unlock</button>
+<button type="button" class="btn btn-success">Customer Transaction</button>
+<button type="button" class="btn btn-danger">Add Security Question(s)</button>
+<a th:href="@{/customer/accounts/approved}">
+<button type="button" class="btn btn-warning">Account Approval</button>
+</a>
+  <img th:src="@{/images/customer_dashboard.jpg}" alt="page"/>
+   <span th:utext="${error}" style="color: red;font-size: 18px;"></span>
+  <div style="width: 70%">
+  </div>
+</div>
+<footer  class="ffooter">
+</footer>
+
+</body>
+</html>
