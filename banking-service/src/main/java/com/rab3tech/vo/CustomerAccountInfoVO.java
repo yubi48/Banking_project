@@ -103,6 +103,7 @@ public class CustomerAccountInfoVO {
 				+ ", tavBalance=" + tavBalance + ", avBalance=" + avBalance + ", StatusAsOf=" + StatusAsOf
 				+ ", accountType=" + accountType + "]";
 	}
+
 	
 	
 

@@ -139,6 +139,12 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer dcustomer = customerRepository.save(pcustomer);
 		customerVO.setId(dcustomer.getId());
 		customerVO.setUserid(customerVO.getUserid());
+		
+		/*
+		 * CustomerAccountInfoVO customerAccountInfo = new CustomerAccountInfoVO();
+		 * String accountNumber = Utils.generateCustomerAccount();
+		 * customerAccountInfo.setAccountNumber(accountNumber);
+		 */
 
 		Optional<CustomerSaving> optional = customerAccountEnquiryRepository.findByEmail(dcustomer.getEmail());
 		if (optional.isPresent()) {

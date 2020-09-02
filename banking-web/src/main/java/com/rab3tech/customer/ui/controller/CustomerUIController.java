@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LocationService;
 import com.rab3tech.customer.service.LoginService;
+import com.rab3tech.customer.service.impl.AddAccountNoServiceImpl;
 import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.customer.service.impl.SecurityQuestionService;
-import com.rab3tech.dao.entity.CustomerAccountInfo;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
@@ -61,6 +61,9 @@ public class CustomerUIController {
 
 	@Autowired
 	private LocationService locationService;
+	
+	@Autowired
+	private AddAccountNoServiceImpl customerAddAcc;
 
 	@GetMapping("/customer/forget/password")
 	public String forgetPassword() {
@@ -143,6 +146,7 @@ public class CustomerUIController {
 		mail.setPassword(customerVO.getPassword());
 		emailService.sendUsernamePasswordEmail(mail);
 		System.out.println(customerVO);
+		customerAddAcc.createAccountNo(customerVO);
 		model.addAttribute("loginVO", new LoginVO());
 		model.addAttribute("message", "Your account has been setup successfully , please check your email.");
 		return "customer/login";
@@ -204,7 +208,7 @@ public class CustomerUIController {
 	}
 
 	@GetMapping("/customer/addPayee")
-	public String customerAddPayee(Model model) {
+	public String customerAddPayee(Model model,HttpSession session) {
 		PayeeInfoVO payeeInfoVO = new PayeeInfoVO();
 		model.addAttribute("payeeInfoVO", payeeInfoVO);
 		return "customer/addPayee";
@@ -239,6 +243,7 @@ public class CustomerUIController {
 		customerService.addPayee(payeeInfoVO);
 		model.addAttribute("successMessage", "Payee added successfully");
 		model.addAttribute("payeeVO", payeeInfoVO);
+		
 		// return "customer/payeeStatus";
 		return "redirect:/customer/payeeStatus";
 
