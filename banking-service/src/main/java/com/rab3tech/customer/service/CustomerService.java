@@ -1,13 +1,13 @@
 package com.rab3tech.customer.service;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import com.rab3tech.dao.entity.PayeeInfo;
 import com.rab3tech.vo.AccountTypeVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerUpdateVO;
 import com.rab3tech.vo.CustomerVO;
+import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 import com.rab3tech.vo.RoleVO;
 
@@ -48,6 +48,10 @@ public interface CustomerService {
 	boolean getUrnNumber(int payeeID, int urnNum, String button);
 
 	List<PayeeInfoVO> registeredPayeeList(String id);
+
+	void depositFund(String accNo, float depositAmt, Date date1);
+
+	String getAccountNumber(LoginVO login);
 
 	//void getUrnNumber(int id, int urnNum, String button);
 

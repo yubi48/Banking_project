@@ -23,6 +23,7 @@ import com.rab3tech.customer.dao.repository.CustomerAccountApprovedRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
 import com.rab3tech.customer.dao.repository.CustomerRepository;
+import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.customer.dao.repository.PayeeRepository;
 import com.rab3tech.customer.dao.repository.RoleRepository;
 import com.rab3tech.customer.service.CustomerService;
@@ -44,6 +45,7 @@ import com.rab3tech.vo.AccountTypeVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerUpdateVO;
 import com.rab3tech.vo.CustomerVO;
+import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 import com.rab3tech.vo.RoleVO;
 
@@ -81,6 +83,9 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private PayeeRepository payeeRepository;
 
+	@Autowired
+	private LoginRepository loginRepo;
+	
 	@Override
 	public CustomerAccountInfoVO createBankAccount(int csaid) {
 		// logic
@@ -366,5 +371,22 @@ public class CustomerServiceImpl implements CustomerService {
 		return true;
 	}
 
+	
+	@Override 
+	public void depositFund(String accNo, float depositAmt, Date date1){ 
+		CustomerAccountInfo accountInfo = customerAccountInfoRepository.findByAccountNumber(accNo).get();
+		accountInfo.setStatusAsOf(date1);
+		accountInfo.setAvBalance(depositAmt + accountInfo.getAvBalance());
+		accountInfo.setTavBalance(depositAmt);
+		
+	  }
+
+	@Override
+	public String getAccountNumber(LoginVO loginVO) {
+		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
+		CustomerAccountInfo accountNoInfo = customerAccountInfoRepository.findByCustomerId(login);
+		return accountNoInfo.getAccountNumber();
+	}
+	 
 
 }

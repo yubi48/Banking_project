@@ -27,5 +27,9 @@ public interface LoginRepository extends JpaRepository<Login, String> {
 	void updateLoginPassword(@Param("ppassword") String ppassword,@Param("login") String login,@Param("passcode") String passcode);
 	
 	public Optional<Login> findByLoginidAndToken(String loginid,String token);
+	
+	
+	//public Optional<Login> findByLoginId(String username); 
+	
 }
 

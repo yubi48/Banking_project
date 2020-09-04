@@ -26,6 +26,16 @@
 }
 
 </style>
+
+<script type="text/javascript">
+	/* 
+	$("form").submit(function(event)){
+		
+	}
+	 */
+	
+</script>
+
 </head>
 <body>
 <header style="height: 30px;background-color: maroon;">
@@ -37,23 +47,27 @@
   <img th:src="@{/images/deposit.png}" alt="Logo" style="height: 120px"/>
   <div style="width: 70%">
   
-   <form th:action="@{/customer/account/deposite}" method="POST" th:object="${customerAccountVO}" >
+   <form th:action="@{/customer/account/deposit}" method="POST" th:object="${customerAccountVO}" >
   
   <div class="form-group">
-      <label for="name">Enter Account Number:</label>
-      <input type="text" style="width: 60%;" class="form-control" th:field="*{accountNumber}" placeholder="Enter account number">
+      <label for="accNumber">Enter Account Number:</label>
+      <input type="text" style="width: 60%;" class="form-control" name="accNumber" id="accNumber" th:field="*{accountNumber}" placeholder="Enter account number">
     </div>
     
     <div class="form-group">
-      <label for="name">Confirm Account Number:</label>
-      <input type="text" style="width: 60%;" class="form-control" th:field="*{confirmaccountNumber}" placeholder="Confirm account number">
+      <label for="confirmAccNO">Confirm Account Number:</label>
+      <input type="text" style="width: 60%;" class="form-control" id="accNoConfirm" th:field="*{confirmaccountNumber}" placeholder="Confirm account number">
     </div>
   
     <div class="form-group">
-      <label for="name">Enter Amount to Deposit:</label>
-      <input type="text" style="width: 60%;" class="form-control" th:field="*{tavBalance}" placeholder="Enter Amount">
+      <label for="depositAmount">Enter Amount to Deposit:</label>
+      <input type="text" style="width: 60%;" class="form-control" name="amtDeposit" id="amtDeposit" th:field="*{tavBalance}" placeholder="Enter Amount">
     </div>
     
+    <div class="form-group">
+		<label for="transferDtae">Transfer Date</label>
+		<input th:type="date" name="date" class="form-control" style="width:40%;">   
+    </div>
    
     <button type="submit" class="btn btn-primary">Deposit</button>
     <a th:href="@{/customer/dashboard}"> 

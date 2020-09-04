@@ -1,5 +1,8 @@
 package com.rab3tech.customer.ui.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -280,23 +283,26 @@ public class CustomerUIController {
 	}
 	
 	@GetMapping("/customer/deposit")
-	public String depositFund(Model model, HttpSession httpSession) {
-		
-		LoginVO loginVO = (LoginVO) httpSession.getAttribute("userSessionVO");
-		String userId = loginVO.getUsername();
-		
+	public String depositFund(Model model) {
 		CustomerAccountInfoVO customerAccountVO = new CustomerAccountInfoVO();
-
-		
 		model.addAttribute("customerAccountVO",customerAccountVO);
 		return "customer/deposit";
 	}
 	
-	@PostMapping("/customer/account/deposite")
-	public void depositFund(@ModelAttribute("customerAccountVO")CustomerAccountInfoVO customerAccountVO) {
-		CustomerAccountInfoVO customerAccountInfo = new CustomerAccountInfoVO();
+	@PostMapping("/customer/account/deposit")
+	public String depositFund(@RequestParam String accountNumber, @RequestParam float tavBalance, @RequestParam String date, Model model) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+		Date date1= null;
 		
+		try {
+			date1 = dateFormat.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
+		customerService.depositFund(accountNumber, tavBalance, date1);
+		
+		return "customer/dashboard";
 	}
 
 	

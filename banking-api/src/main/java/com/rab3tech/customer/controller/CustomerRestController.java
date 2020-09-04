@@ -2,6 +2,8 @@ package com.rab3tech.customer.controller;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.utils.PasswordGenerator;
 import com.rab3tech.vo.ApplicationResponseVO;
@@ -31,6 +34,8 @@ public class CustomerRestController {
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
+	@Autowired
+	private CustomerService customerService;
 	
 	//{   "loginid":"nagen@gmail.com",
 	 //      "passcode":"2938939",
@@ -106,5 +111,12 @@ public class CustomerRestController {
 			applicationResponseVO.setMessage("Userid is not correct");
 		}
 		return applicationResponseVO;
+	}
+	
+	@GetMapping("/customer/findAccountNo")
+	public String findAccountNumber(HttpSession session) {
+		LoginVO login = (LoginVO) session.getAttribute("userSessionVO");
+		String accNumber = customerService.getAccountNumber(login);
+		return accNumber;
 	}
 }

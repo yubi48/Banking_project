@@ -179,16 +179,16 @@
     <td>
       <span th:utext="${iter.index+1}"></span>
       
-      <a th:onclick="|openModal(${customerVO.id},'${customerVO.name}','${customerVO.mobile}')|"  href="#"> 
-      <img th:src="@{/images/icon.png}"/>
-      </a>
-       <a th:onclick="|openRolesPopup(${customerVO.id},'${customerVO.name}','${customerVO.userid}')|"  href="#"> 
+     <!--  <a th:onclick="|javascript:openModal('${customerVO.id}','${customerVO.name}','${customerVO.mobile}');|"  href="#">  -->
+      <img th:src="@{/images/icon.png}" th:onclick="|javascript:openModal('${customerVO.id}','${customerVO.name}','${customerVO.mobile}');|"/>
+     <!--  </a> -->
+     <!--   <a th:onclick="|openRolesPopup(${customerVO.id},'${customerVO.name}','${customerVO.userid}')|"  href="#"> 
       
       <img th:src="@{/images/email.png}"/>
       
       
       </a>
-      
+       --> -->
       
     </td>
     <td th:text="${customerVO.name}">
