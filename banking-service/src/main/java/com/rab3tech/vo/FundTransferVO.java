@@ -6,6 +6,17 @@ public class FundTransferVO {
 	private String toAccount;
 	private String remarks;
 	private double amount;
+	private int otp;
+	
+	
+
+	public int getOtp() {
+		return otp;
+	}
+
+	public void setOtp(int otp) {
+		this.otp = otp;
+	}
 
 	public String getFromAccount() {
 		return fromAccount;
@@ -42,7 +53,7 @@ public class FundTransferVO {
 	@Override
 	public String toString() {
 		return "FundTransferVO [fromAccount=" + fromAccount + ", toAccount=" + toAccount + ", remarks=" + remarks
-				+ ", amount=" + amount + "]";
+				+ ", amount=" + amount + ", otp=" + otp + "]";
 	}
 
 }

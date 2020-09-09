@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rab3tech.customer.service.CustomerService;
+import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.FromToAccountsVO;
 import com.rab3tech.vo.PayeeInfoVO;
@@ -55,5 +57,12 @@ public class CutomerFundTransferController {
 		
 	}
 	
-	
+	@GetMapping("/transaction/otp")
+	public String transactionOtp(@RequestParam("username") String username, Model model) {
+		int otpNum = Utils.randonUrnNumber();
+		System.out.println("OTP:" + otpNum);
+		model.addAttribute("otpNum",otpNum);
+
+		return "generrate";
+	}
 }

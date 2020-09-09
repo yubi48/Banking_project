@@ -26,30 +26,46 @@
 
 <script type="text/javascript">
 
-
-	function loadData(){
-	
-	var username = $("#user").html();
-	
-
-	fetch("/v3/customer/from-to-accounts?loginid="+username).then(response=>response.json()).then(function(data){
-		console.log(data);
+	$(document).ready(function loadData(){
 		
-		$("#fromAccount").append(
-				$("<option/>").val(data.fromAccount).text(data.fromAccount));
-		
-		var arrayData = data.toAccounts;
-		
-		for(var x=0;x<arrayData.length;x++){
+			var selectedVal=$("#toAccount").val();
+			var tokens=selectedVal.split("-");
+			var accountNumber=tokens[0].trim();
+			console.log(accountNumber);
+			$("#cphoto").attr("src","/customers/trPhoto?accNumber="+accountNumber);
 			
-			$("#toAccount").append($("<option/>").val(arrayData[x]).text(arrayData[x]));
-		}
+			
 		
-		$("#cbalance").html(data.currentBalance);
+				var aamount = $("#amount").val();
+				fetch("/v3/amount/words?amount="+aamount).then(response=>response.text()).then(function(data){
+					$("#amountWord").html(data);
+				})
+				sendOTP();
+
 	
-})
+	})
+	
+	function sendOTP(){
+		$("#resetOtp").prop("disabled",true);
+		
+		var username = $("#user").html();
+		
+		fetch("/v3/transaction/otp?username="+username).then(response=>response.text()).then(function(data){
+			$("#otpSection").show();
+			console.log(data);
+			var timeleft = 15;
+            var codeTimer = setInterval(function() {
+                timeleft--;
+                $("#otpTimer").html(timeleft + " second(s) left")
+                if (timeleft <= 0) {
+                    clearInterval(codeTimer);
+                    $("#otpTimer").html("");
+                    $("#resetOtp").prop('disabled', false);
+                }
+            }, 1000);
+			
+		})
 	}
-	
 	
 
 </script>
@@ -81,7 +97,7 @@
     <span id="errorMessage" th:utext="${successMessage}" style="color: blue;font-size: 14px;"></span>
   </div>
     <br/>
-    <span id="cBalance">Current Balance:</span>
+   <!--  <span id="cBalance">Current Balance:</span> -->
     <table class="table table-bordered" style="width: 100%;">
 
 
@@ -95,15 +111,13 @@
 									
 									Current Balance: <span id="cbalance" style="color:red;"></span>
 									</label> <br /> 
-									<select name="fromAccount" class="form-control" id="fromAccount"></select>
+									<input name="fromAccount" class="form-control" id="fromAccount" th:field="*{fromAccount}" readonly="readonly">
 								</div>
 							</td>
 							<td style="width: 50%">
 								<div>
 									<label for="toAccount">To Account:</label> <br /> 
-									<select name="toAccount" class="form-control" id="toAccount" style="font-weight: bold;">
-									    <option>Select</option>
-									</select>
+									<input name="toAccount" class="form-control" id="toAccount" th:field="*{toAccount}" style="font-weight: bold;" readonly="readonly">
 									<!-- <input
 										type="text" class="form-control" th:field="*{payeeNickName}"> -->
 								</div>
@@ -115,9 +129,9 @@
 								<td>
 
 									<div>
-										<label for="Amount">Amount:									
+										<label for="Amount">Transferring Amount:									
 									</label> <br />
-									<input type="text" class="form-control" th:field="*{amount}" readonly="readonly">
+									<input type="text" class="form-control" id="amount" th:field="*{amount}" readonly="readonly">
 									<span id="amountWord" style="color:blue;"></span>
 								</div>
 
@@ -136,6 +150,14 @@
 										 class="form-control" id="remark" placeholder="Remarks" 
 										name="remarks" th:field="*{remarks}" readonly="readonly">
 										<!-- <span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}">Name Error</span> -->
+								</div>
+							</td>
+							<td><div id="otpSection">
+								<label for="otp" Style="color:Green;"><b>OTP:</b></label><br/>
+								<input type="text" class="form-control" th:field="*{otp}">
+								<span style="color:red;font-weight:bold" id="otpTimer"></span>
+								<br/>
+								<button type="button" id="resetOtp" class="btn btn-danger" disabled="disabled">Resend</button>
 								</div>
 							</td>
 						</tr>
