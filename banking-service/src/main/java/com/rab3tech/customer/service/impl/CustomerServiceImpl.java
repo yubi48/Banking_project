@@ -256,6 +256,20 @@ public class CustomerServiceImpl implements CustomerService {
 
 		return customerVO;
 	}
+	
+	
+	@Override
+	public CustomerAccountInfoVO findCustomerAccountInfo(String customerId) {
+		Optional<Customer> customerInfo = customerRepository.findByEmail(customerId);
+		CustomerAccountInfo customerAccInfo = customerAccountInfoRepository.findByCustomerId(customerId);
+		CustomerAccountInfoVO customerAccInfoVO = new CustomerAccountInfoVO();
+		BeanUtils.copyProperties(customerAccInfo, customerAccInfoVO);
+		
+		customerAccInfoVO.setName(customerInfo.get().getName());
+		customerAccInfoVO.setAcccountType(customerAccInfo.getAccountType().getName());
+		return customerAccInfoVO;
+		
+	}
 
 	@Override
 	public List<AccountTypeVO> findAccountTypes() {
@@ -386,6 +400,13 @@ public class CustomerServiceImpl implements CustomerService {
 		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
 		CustomerAccountInfo accountNoInfo = customerAccountInfoRepository.findByCustomerId(login);
 		return accountNoInfo.getAccountNumber();
+	}
+
+	@Override
+	public byte[] findPhotoByAc(String accNumber) {
+		CustomerAccountInfo customerAccountInfo = customerAccountInfoRepository.findByAccountNumber(accNumber).get();
+		Customer customer = customerRepository.findByEmail(customerAccountInfo.getCustomerId().getLoginid()).get();
+		return customer.getImage();
 	}
 	 
 

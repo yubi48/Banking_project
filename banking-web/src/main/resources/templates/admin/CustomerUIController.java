@@ -1,14 +1,11 @@
 package com.rab3tech.customer.ui.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -36,7 +33,6 @@ import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.EmailVO;
-import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 
@@ -282,15 +278,8 @@ public class CustomerUIController {
 	}
 	
 	@GetMapping("/customer/fundTransfer")
-	public String fundTransfer(Model model) {
-		FundTransferVO fundTransferVO = new FundTransferVO();
-		model.addAttribute("fundTransferVO",fundTransferVO);
+	public String fundTransfer() {
 		return "customer/fundTransfer";
-	}
-	
-	@PostMapping("/customer/fundTransfer")
-	public String fundTransferReview(@ModelAttribute("fundTransferVO") FundTransferVO fundTransferVO) {
-		return "customer/fundTransferReview";
 	}
 	
 	@GetMapping("/customer/deposit")
@@ -316,21 +305,6 @@ public class CustomerUIController {
 		return "customer/dashboard";
 	}
 
-	
-	@GetMapping("/customers/trPhoto")
-	public void findCustomerPhotoByAc(@RequestParam String accNumber, HttpServletResponse response) throws IOException {
-		byte[] photo = customerService.findPhotoByAc(accNumber);
-		response.setContentType("img/png");
-		ServletOutputStream outputStream = response.getOutputStream();
-		if(photo != null) {
-			outputStream.write(photo);
-		}else {
-			outputStream.write(new byte[] {});
-		}
-		
-		outputStream.flush();
-		outputStream.close();
-	}
 	
 	/*
 	 * @GetMapping("/customer/payeeStatusInfo") public String

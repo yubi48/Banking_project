@@ -53,6 +53,10 @@ public interface CustomerService {
 
 	String getAccountNumber(LoginVO login);
 
+	byte[] findPhotoByAc(String accNumber);
+
+	CustomerAccountInfoVO findCustomerAccountInfo(String customerId);
+
 	//void getUrnNumber(int id, int urnNum, String button);
 
 	

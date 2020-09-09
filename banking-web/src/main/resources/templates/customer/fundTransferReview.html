@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Fund Transfer Page</title>
+  <title>Fund Transfer Review Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,10 +24,10 @@
 }
 </style>
 
-<script  type="text/javascript">
+<script type="text/javascript">
 
 
-$(document).ready(function loadData(){
+	function loadData(){
 	
 	var username = $("#user").html();
 	
@@ -46,22 +46,11 @@ $(document).ready(function loadData(){
 		}
 		
 		$("#cbalance").html(data.currentBalance);
-	});
 	
-	$("#amount").blur(function(){
-		var aamount = $(this).val();
-		fetch("/v3/amount/words?amount="+aamount).then(response=>response.text()).then(function(data){
-			$("#amountWord").html(data);
-		})
-	})
-	
-	$("#toAccount").change(function(){
-		var selectedVal=$(this).val();
-		var tokens=selectedVal.split("-");
-		var accountNumber=tokens[0].trim();
-		$("#cphoto").attr("src","/customers/trPhoto?accNumber="+accountNumber);
-	})
 })
+	}
+	
+	
 
 </script>
 </head>
@@ -128,7 +117,7 @@ $(document).ready(function loadData(){
 									<div>
 										<label for="Amount">Amount:									
 									</label> <br />
-									<input type="text" class="form-control" th:field="*{amount}">
+									<input type="text" class="form-control" th:field="*{amount}" readonly="readonly">
 									<span id="amountWord" style="color:blue;"></span>
 								</div>
 
@@ -145,7 +134,7 @@ $(document).ready(function loadData(){
 								<div>
 									<label for="remarks">Remarks:</label> <br /> <input type="text"
 										 class="form-control" id="remark" placeholder="Remarks" 
-										name="remarks" th:field="*{remarks}">
+										name="remarks" th:field="*{remarks}" readonly="readonly">
 										<!-- <span th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}">Name Error</span> -->
 								</div>
 							</td>
@@ -156,7 +145,7 @@ $(document).ready(function loadData(){
 
    <br/>
  
-    <button type="submit"  class="btn btn-primary">Transfer</button>
+    <button type="button" id="submitButton" onclick="validateForm();" class="btn btn-primary">Transfer</button>
    
   </form>
   </div>

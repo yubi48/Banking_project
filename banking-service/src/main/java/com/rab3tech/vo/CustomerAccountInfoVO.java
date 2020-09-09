@@ -6,13 +6,31 @@ public class CustomerAccountInfoVO {
 	private long id;
 	private LoginVO customerId;
 	private String accountNumber;
-	private String confirmaccountNumber;
+	// private String confirmaccountNumber;
 	private String currency;
 	private String branch;
 	private float tavBalance;
 	private float avBalance;
 	private Date StatusAsOf;
+	private String name;
 	private AccountTypeVO accountType;
+	private String acccountType;
+
+	public String getAcccountType() {
+		return acccountType;
+	}
+
+	public void setAcccountType(String acccountType) {
+		this.acccountType = acccountType;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public long getId() {
 		return id;
@@ -85,26 +103,13 @@ public class CustomerAccountInfoVO {
 	public void setAccountType(AccountTypeVO accountType) {
 		this.accountType = accountType;
 	}
-	
-	
-
-	public String getConfirmaccountNumber() {
-		return confirmaccountNumber;
-	}
-
-	public void setConfirmaccountNumber(String confirmaccountNumber) {
-		this.confirmaccountNumber = confirmaccountNumber;
-	}
 
 	@Override
 	public String toString() {
 		return "CustomerAccountInfoVO [id=" + id + ", customerId=" + customerId + ", accountNumber=" + accountNumber
-				+ ", confirmaccountNumber=" + confirmaccountNumber + ", currency=" + currency + ", branch=" + branch
-				+ ", tavBalance=" + tavBalance + ", avBalance=" + avBalance + ", StatusAsOf=" + StatusAsOf
-				+ ", accountType=" + accountType + "]";
+				+ ", currency=" + currency + ", branch=" + branch + ", tavBalance=" + tavBalance + ", avBalance="
+				+ avBalance + ", StatusAsOf=" + StatusAsOf + ", name=" + name + ", accountType=" + accountType
+				+ ", acccountType=" + acccountType + "]";
 	}
-
-	
-	
 
 }
